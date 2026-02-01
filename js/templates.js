@@ -48,6 +48,61 @@ export const continuousTemplates = [
       };
     }
   }
+  ,
+  {
+    id: 'cont3',
+    title: 'Histogram of BMI',
+    type: 'code',
+    generate() {
+      return {
+        mission: 'Create a histogram of the BMI variable.',
+        dataInject(dataset) {
+          // no special injection required
+        },
+        check(commands) {
+          return commands.some((cmd) => /histogram\s+bmi/.test(cmd.toLowerCase()));
+        }
+      };
+    }
+  },
+  {
+    id: 'cont4',
+    title: 'Mean BMI by Region',
+    type: 'code',
+    generate() {
+      return {
+        mission: 'Compute the mean BMI by region and store it in a variable mean_bmi_region (use egen or collapse).',
+        dataInject(dataset) {},
+        check(commands) {
+          return commands.some((cmd) => {
+            const c = cmd.toLowerCase();
+            // Accept egen mean or collapse
+            return (
+              /egen\s+mean_bmi_region\s*=\s*mean\(\s*bmi\s*\)\s*,?\s*by\(region\)/.test(c) ||
+              /collapse\s+\(mean\)\s+bmi\s+.*by\s+region/.test(c)
+            );
+          });
+        }
+      };
+    }
+  },
+  {
+    id: 'cont5',
+    title: 'Linear Regression of BMI on Age and Sex',
+    type: 'code',
+    generate() {
+      return {
+        mission: 'Fit a linear regression model with BMI as the outcome and age and sex as predictors.',
+        dataInject(dataset) {},
+        check(commands) {
+          return commands.some((cmd) => {
+            const c = cmd.toLowerCase();
+            return /regress\s+bmi/.test(c) && /age/.test(c) && /sex/.test(c);
+          });
+        }
+      };
+    }
+  }
 ];
 
 export const binaryTemplates = [
@@ -74,6 +129,58 @@ export const binaryTemplates = [
       };
     }
   }
+  ,
+  {
+    id: 'bin2',
+    title: 'Tabulate Mortality by Sex',
+    type: 'code',
+    generate() {
+      return {
+        mission: 'Create a two-way table of mortality by sex with either row or column percentages.',
+        dataInject(dataset) {},
+        check(commands) {
+          return commands.some((cmd) => {
+            const c = cmd.toLowerCase();
+            return /tabulate\s+mortality\s+sex/.test(c) && /(row|col)/.test(c);
+          });
+        }
+      };
+    }
+  },
+  {
+    id: 'bin3',
+    title: 'Logistic Regression with BMI',
+    type: 'code',
+    generate() {
+      return {
+        mission: 'Fit a logistic regression model for mortality on BMI, age and sex. Show odds ratios.',
+        dataInject(dataset) {},
+        check(commands) {
+          return commands.some((cmd) => {
+            const c = cmd.toLowerCase();
+            return (/^(logistic|logit)/.test(c) && /mortality/.test(c) && /bmi/.test(c) && /age/.test(c) && /sex/.test(c));
+          });
+        }
+      };
+    }
+  },
+  {
+    id: 'bin4',
+    title: 'Interpret BMI Odds Ratio',
+    type: 'mcq',
+    generate() {
+      return {
+        mission: 'If the odds ratio for BMI in a logistic regression model predicting mortality is 1.10, how should you interpret this?',
+        choices: [
+          'Each one-unit increase in BMI multiplies the odds of mortality by 1.10',
+          'BMI is not associated with mortality',
+          'Each one-unit increase in BMI multiplies the odds of mortality by 0.10',
+          'BMI reduces the odds of mortality by 10%'
+        ],
+        correctIndex: 0
+      };
+    }
+  }
 ];
 
 export const countTemplates = [
@@ -93,6 +200,62 @@ export const countTemplates = [
             return /poisson/.test(c) && /visits_12mo/.test(c) && /age/.test(c) && /sex/.test(c);
           });
         }
+      };
+    }
+  }
+  ,
+  {
+    id: 'cnt2',
+    title: 'Negative Binomial Regression for Visits',
+    type: 'code',
+    generate() {
+      return {
+        mission: 'Fit a negative binomial regression model for visits_12mo using age and sex as predictors.',
+        dataInject(dataset) {},
+        check(commands) {
+          return commands.some((cmd) => {
+            const c = cmd.toLowerCase();
+            return /nbreg/.test(c) && /visits_12mo/.test(c) && /age/.test(c) && /sex/.test(c);
+          });
+        }
+      };
+    }
+  },
+  {
+    id: 'cnt3',
+    title: 'Total Visits by Region',
+    type: 'code',
+    generate() {
+      return {
+        mission: 'Compute the total number of visits in 12 months for each region.',
+        dataInject(dataset) {},
+        check(commands) {
+          return commands.some((cmd) => {
+            const c = cmd.toLowerCase();
+            // Accept collapse (sum) visits_12mo, by(region) or egen total
+            return (
+              /collapse\s+\(sum\)\s+visits_12mo.*by\s+region/.test(c) ||
+              /egen\s+.*=\s*total\(visits_12mo\).*by\(region\)/.test(c)
+            );
+          });
+        }
+      };
+    }
+  },
+  {
+    id: 'cnt4',
+    title: 'Interpretation of IRR',
+    type: 'mcq',
+    generate() {
+      return {
+        mission: 'If the incidence rate ratio (IRR) for age in a Poisson model is 1.05, what does this mean?',
+        choices: [
+          'Each additional year of age increases the expected count by 5%',
+          'Age is not associated with the count outcome',
+          'Each additional year of age decreases the expected count by 5%',
+          'The IRR cannot be interpreted'
+        ],
+        correctIndex: 0
       };
     }
   }
@@ -169,6 +332,66 @@ export const cleaningTemplates = [
       };
     }
   }
+  ,
+  {
+    id: 'clean4',
+    title: 'Remove Unrealistic BMI Values',
+    type: 'code',
+    generate() {
+      return {
+        mission: 'Drop observations with BMI less than 10 or greater than 60.',
+        dataInject(dataset) {},
+        check(commands) {
+          return commands.some((cmd) => {
+            const c = cmd.toLowerCase();
+            // Accept drop if bmi < 10 | bmi > 60, with or without parentheses
+            return /drop\s+if\s+(bmi\s*<\s*10\s*\|\s*bmi\s*>\s*60)/.test(c) || /drop\s+if\s+bmi\s*<\s*10\s*\|\|\s*bmi\s*>\s*60/.test(c);
+          });
+        }
+      };
+    }
+  },
+  {
+    id: 'clean5',
+    title: 'Convert BMI String to Numeric',
+    type: 'code',
+    generate() {
+      return {
+        mission: 'Convert the BMI variable from string to numeric, creating a new variable if necessary.',
+        dataInject(dataset) {
+          // Convert some BMI values to string to simulate messy data
+          dataset.forEach((row) => {
+            if (Math.random() < 0.1) row.bmi = row.bmi.toString();
+          });
+        },
+        check(commands) {
+          return commands.some((cmd) => {
+            const c = cmd.toLowerCase();
+            // Accept destring bmi, generate(newvar) or destring bmi, replace
+            return /destring\s+bmi/.test(c);
+          });
+        }
+      };
+    }
+  },
+  {
+    id: 'clean6',
+    title: 'Date Conversion',
+    type: 'code',
+    generate() {
+      return {
+        mission: 'Assume there is a variable visit_date in day-month-year string format. Convert visit_date to a Stata date variable named visit_date_stata.',
+        dataInject(dataset) {},
+        check(commands) {
+          return commands.some((cmd) => {
+            const c = cmd.toLowerCase();
+            // Accept gen visit_date_stata = date(visit_date, "DMY") or similar with dmy
+            return /gen(erate)?\s+visit_date_stata\s*=\s*date\(\s*visit_date\s*,\s*"?dmy"?\s*\)/.test(c);
+          });
+        }
+      };
+    }
+  }
 ];
 
 export const assumptionsTemplates = [
@@ -205,6 +428,31 @@ export const assumptionsTemplates = [
         mission: 'If a Poisson model for count data shows overdispersion, which alternative model is recommended?',
         choices: ['regress', 'logit', 'nbreg', 'poisson'],
         correctIndex: 2
+      };
+    }
+  }
+  ,
+  {
+    id: 'assump4',
+    title: 'Logistic Model Goodness-of-Fit',
+    type: 'mcq',
+    generate() {
+      return {
+        mission: 'Which Stata command can be used to assess the goodness-of-fit of a logistic regression model?',
+        choices: ['estat gof', 'linktest', 'lrtest', 'swilk'],
+        correctIndex: 0
+      };
+    }
+  },
+  {
+    id: 'assump5',
+    title: 'Multicollinearity Check',
+    type: 'mcq',
+    generate() {
+      return {
+        mission: 'After fitting a linear regression, which command checks for multicollinearity among predictors?',
+        choices: ['vif', 'rvfplot', 'hettest', 'testparm'],
+        correctIndex: 0
       };
     }
   }

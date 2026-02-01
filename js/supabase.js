@@ -4,8 +4,21 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/esm/index.js';
 
 // TODO: Provide your Supabase credentials here
-const SUPABASE_URL = '<YOUR_SUPABASE_URL>'; // e.g. 'https://xyzcompany.supabase.co'
-const SUPABASE_ANON_KEY = '<YOUR_SUPABASE_ANON_KEY>';
+//
+// You can either replace the placeholder values below with your actual Supabase project URL and anon key,
+// or define global variables `SUPABASE_URL` and `SUPABASE_ANON_KEY` on the window object (e.g. via an inline
+// script tag in index.html or via a bundler's environment variables). When deploying to Vercel or another
+// hosting platform, set these values as environment variables and expose them at build time.
+
+const SUPABASE_URL = 'https://khsccfzvicppmdzefhnq.supabase.co'
+  (typeof window !== 'undefined' && window.SUPABASE_URL) ||
+  (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_SUPABASE_URL) ||
+  '<YOUR_SUPABASE_URL>'; // e.g. 'https://xyzcompany.supabase.co'
+
+const SUPABASE_ANON_KEY = 'sb_publishable_L0bLSQgUhqcfl-m-VnYR-g_fIZ51xUf'
+  (typeof window !== 'undefined' && window.SUPABASE_ANON_KEY) ||
+  (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_SUPABASE_ANON_KEY) ||
+  '<YOUR_SUPABASE_ANON_KEY>';
 
 // Initialize Supabase client
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
