@@ -1,99 +1,153 @@
-/* Basic styles for Stata Command Quest */
+/* Enhanced styles for Stata Command Quest */
+
+/* Import a modern, clean font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+
+/* Define a cohesive colour palette using CSS variables */
+:root {
+  --primary-color: #4f46e5;    /* Indigo 600 */
+  --primary-hover: #4338ca;    /* Indigo 700 */
+  --accent-color: #06b6d4;     /* Cyan 500 */
+  --danger-color: #ef4444;     /* Red 500 */
+  --bg-color: #f3f4f6;         /* Cool grey */
+  --card-bg: #ffffff;          /* White for cards */
+  --text-color: #111827;       /* Dark slate */
+  --muted-text: #6b7280;       /* Cool grey 500 */
+  --border-radius: 8px;
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   margin: 0;
   padding: 0;
-  background: #f6f8fa;
+  background: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.5;
 }
 
+/* Container for the entire app */
 #app {
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 24px;
 }
 
+
+/* Sections behave like pages; centre content with breathing space */
 .screen {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  margin-top: 20px;
+  margin-top: 24px;
+  width: 100%;
 }
 
 .hidden {
   display: none !important;
 }
 
-h1, h2, h3 {
-  margin-bottom: 10px;
+
+h1,
+h2,
+h3 {
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: var(--text-color);
 }
+
 
 .intro {
-  margin-bottom: 10px;
+  margin-bottom: 16px;
   text-align: center;
+  color: var(--muted-text);
+  max-width: 480px;
 }
 
+
+/* Inputs and selects */
 input[type="email"],
 input[type="password"],
 input[type="text"],
 select,
 textarea {
-  margin: 5px 0;
-  padding: 8px;
+  margin: 6px 0;
+  padding: 10px 12px;
   width: 100%;
-  max-width: 280px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  max-width: 320px;
+  border: 1px solid #d1d5db;
+  border-radius: var(--border-radius);
   box-sizing: border-box;
+  font-size: 14px;
+  background: #ffffff;
+  color: var(--text-color);
+  transition: border-color 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
 }
 
 textarea {
   resize: vertical;
-  min-height: 80px;
-  max-width: 500px;
+  min-height: 90px;
+  max-width: 600px;
 }
 
+/* Buttons */
 button {
-  margin: 5px;
-  padding: 8px 16px;
+  margin: 6px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 4px;
-  background-color: #0366d6;
-  color: white;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: #ffffff;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
 }
 
 button.logout {
-  background-color: #d73a49;
+  background-color: var(--danger-color);
 }
 
 button:hover {
-  opacity: 0.9;
+  background-color: var(--primary-hover);
 }
 
+
+/* Containers for creating and joining rooms */
 .room-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-}
-
-.create-room, .join-room {
-  background: white;
-  padding: 15px;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 280px;
-}
-
-.scoreboard {
-  background: white;
-  padding: 10px;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 15px;
+  gap: 24px;
+  justify-content: center;
   width: 100%;
-  max-width: 500px;
+}
+
+.create-room,
+.join-room {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  width: 300px;
+}
+
+/* Scoreboard styling */
+.scoreboard {
+  background: var(--card-bg);
+  padding: 16px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 600px;
 }
 
 .scoreboard table {
@@ -101,33 +155,42 @@ button:hover {
   border-collapse: collapse;
 }
 
-.scoreboard th, .scoreboard td {
+.scoreboard th,
+.scoreboard td {
   text-align: left;
-  padding: 6px 8px;
-  border-bottom: 1px solid #eee;
+  padding: 8px 10px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
 }
 
+/* Mission area */
 .mission-area {
-  background: white;
-  padding: 15px;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
   width: 100%;
-  max-width: 600px;
-  margin-bottom: 15px;
+  max-width: 700px;
+  margin-bottom: 20px;
 }
 
 .mission-area #mission-description {
-  margin-bottom: 10px;
+  margin-bottom: 16px;
+  font-weight: 500;
 }
 
+/* Multiple-choice container */
 #mcq-container label {
   display: block;
-  margin: 4px 0;
+  margin: 6px 0;
+  cursor: pointer;
+  font-size: 14px;
 }
 
+/* Status messages */
 .status {
-  color: #d73a49;
+  color: var(--danger-color);
   font-size: 14px;
-  margin-top: 5px;
+  margin-top: 6px;
+  text-align: center;
 }
