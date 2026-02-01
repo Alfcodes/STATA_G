@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stata Command Quest - Multiplayer</title>
+    <!-- PWA manifest -->
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Authentication screen -->
+      <section id="auth-section" class="screen">
+        <h1>Stata Command Quest</h1>
+        <p class="intro">Sign up or sign in to start playing. Use your email to create an account.</p>
+        <div id="auth-form">
+          <input type="email" id="auth-email" placeholder="Email" />
+          <input type="password" id="auth-password" placeholder="Password" />
+          <div class="auth-buttons">
+            <button id="signup-btn">Sign Up</button>
+            <button id="signin-btn">Sign In</button>
+          </div>
+          <p id="auth-status" class="status"></p>
+        </div>
+      </section>
+
+      <!-- Lobby / Room selection -->
+      <section id="lobby-section" class="screen hidden">
+        <h2>Welcome, <span id="user-email"></span></h2>
+        <div class="room-actions">
+          <div class="create-room">
+            <h3>Create Room</h3>
+            <label for="mode-select">Select mode:</label>
+            <select id="mode-select">
+              <option value="continuous">Continuous</option>
+              <option value="binary">Binary</option>
+              <option value="count">Count</option>
+              <option value="cleaning">Cleaning</option>
+              <option value="assumptions">Assumptions</option>
+            </select>
+            <button id="create-room-btn">Create Room</button>
+          </div>
+          <div class="join-room">
+            <h3>Join Room</h3>
+            <input type="text" id="join-code" placeholder="Room code" />
+            <button id="join-room-btn">Join</button>
+          </div>
+          <button id="logout-btn" class="logout">Log Out</button>
+        </div>
+        <p id="lobby-status" class="status"></p>
+      </section>
+
+      <!-- Game play screen -->
+      <section id="game-section" class="screen hidden">
+        <h2>Room: <span id="room-code"></span></h2>
+        <div class="scoreboard" id="scoreboard"></div>
+        <div class="mission-area">
+          <div id="mission-description"></div>
+          <!-- Input for code-based missions -->
+          <textarea id="command-input" rows="4" placeholder="Type your Stata commands here..."></textarea>
+          <!-- MCQ area -->
+          <div id="mcq-container" class="hidden"></div>
+          <button id="check-btn">Check</button>
+        </div>
+        <div class="game-actions">
+          <button id="next-mission-btn">Next Mission</button>
+          <button id="leave-room-btn" class="logout">Leave Room</button>
+        </div>
+        <p id="game-status" class="status"></p>
+      </section>
+    </div>
+
+    <script type="module" src="js/supabase.js"></script>
+    <script type="module" src="js/templates.js"></script>
+    <script type="module" src="js/gameEngine.js"></script>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
